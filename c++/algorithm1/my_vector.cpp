@@ -6,7 +6,7 @@ template <class T>
 class myvector
 {
 public:
-    myvector() // ¹¹Ôìº¯Êı
+    myvector() // æ„é€ å‡½æ•°
     {
         this->arr = new T[INIT_CAP];
         this->cap = INIT_CAP;
@@ -25,7 +25,7 @@ public:
         delete[] arr;
     }
 
-    // ÔÚÄ©Î²²åÈë
+    // åœ¨æœ«å°¾æ’å…¥
     void insert(T num)
     {
         if (size == cap)
@@ -36,7 +36,7 @@ public:
         size++;
     }
 
-    // ÔÚÖĞ¼ä²åÈë
+    // åœ¨ä¸­é—´æ’å…¥
     void insert(int index, T num)
     {
         if (size == cap)
@@ -52,7 +52,7 @@ public:
         size++;
     }
 
-    // É¾³ı
+    // åˆ é™¤
     T mydelete()
     {
         T temp = arr[size - 1];
@@ -66,7 +66,7 @@ public:
         return temp;
     }
 
-    // É¾³ıË÷ÒıÖµ
+    // åˆ é™¤ç´¢å¼•å€¼
     T mydelete(int index)
     {
         T temp = arr[index];
@@ -83,25 +83,25 @@ public:
         return temp;
     }
 
-    // ¸Ä
+    // æ”¹
     void mymodify(int index, T num)
     {
         arr[index] = num;
     }
 
-    // ²é
+    // æŸ¥
     T myfind(int index)
     {
         return arr[index];
     }
 
-    // ²é¿´Êı¾İ¸öÊı
+    // æŸ¥çœ‹æ•°æ®ä¸ªæ•°
     int getSize()
     {
         return this->size;
     }
 
-    // ²é¿´È«²¿Êı¾İ
+    // æŸ¥çœ‹å…¨éƒ¨æ•°æ®
     void display()
     {
         for (int i = 0; i < size; i++)
@@ -111,7 +111,7 @@ public:
         cout << endl;
     }
 
-    // ÖØĞÂ·ÖÅä´óĞ¡
+    // é‡æ–°åˆ†é…å¤§å°
     void resize(int newcap)
     {
         T *newarr = new T[newcap];
@@ -126,10 +126,10 @@ public:
     }
 
 private:
-    int cap;                       // ×î´óÈİÁ¿
-    int size;                      // µ±Ç°Êı¾İ¸öÊı
-    T *arr;                        // µ×²ãÊı×é
-    static const int INIT_CAP = 1; // ³õÊ¼ÈİÁ¿
+    int cap;                       // æœ€å¤§å®¹é‡
+    int size;                      // å½“å‰æ•°æ®ä¸ªæ•°
+    T *arr;                        // åº•å±‚æ•°ç»„
+    static const int INIT_CAP = 1; // åˆå§‹å®¹é‡
 };
 
 int main()

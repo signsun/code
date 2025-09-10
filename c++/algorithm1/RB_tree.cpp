@@ -10,11 +10,11 @@ class RBTree
 private:
     struct Node
     {
-        DataType Data;      // Êı¾İ
-        int Color;          // ½ÚµãÑÕÉ«
-        int Key;            // ¹Ø¼ü×Ö
-        Node *Left, *Right; // ×óÓÒº¢×Ó
-        Node *Parent;       // ¸¸½ÚµãÖ¸Õë
+        DataType Data;      // æ•°æ®
+        int Color;          // èŠ‚ç‚¹é¢œè‰²
+        int Key;            // å…³é”®å­—
+        Node *Left, *Right; // å·¦å³å­©å­
+        Node *Parent;       // çˆ¶èŠ‚ç‚¹æŒ‡é’ˆ
 
         Node()
         {
@@ -50,7 +50,7 @@ public:
 
     bool insert(const int &key, const DataType &data)
     {
-        // Ê÷Îª¿ÕÖ±½Ó²åÈë
+        // æ ‘ä¸ºç©ºç›´æ¥æ’å…¥
         if (root == nullptr)
         {
             Node *newNode = new Node;
@@ -61,10 +61,10 @@ public:
             return true;
         }
 
-        // ÅĞ¶Ï·µ»ØÖµ
+        // åˆ¤æ–­è¿”å›å€¼
         auto ret = find(key);
-        Node *cur = ret.first; // ·µ»ØµÄ½Úµã
-        // Èç¹û´æÔÚkey£¬¸üĞÂÆäÊı¾İ
+        Node *cur = ret.first; // è¿”å›çš„èŠ‚ç‚¹
+        // å¦‚æœå­˜åœ¨keyï¼Œæ›´æ–°å…¶æ•°æ®
         if (ret.second == 1)
         {
             cur->Data = data;
@@ -74,21 +74,21 @@ public:
         Node *newNode = new Node;
         newNode->Data = data;
         newNode->Key = key;
-        // ¸¸½ÚµãÊÇºÚÉ«£¬Ö±½Ó²åÈë
+        // çˆ¶èŠ‚ç‚¹æ˜¯é»‘è‰²ï¼Œç›´æ¥æ’å…¥
         if (cur->Color == black)
         {
 
             insertKey(cur, newNode);
             return true;
         }
-        // ¸¸½ÚµãÊÇºìÉ«
+        // çˆ¶èŠ‚ç‚¹æ˜¯çº¢è‰²
         else
         {
             Node *grandParent = cur->Parent;
-            // ¸¸½ÚµãÊÇ×æ¸¸½áµãµÄ×ó×Ó½Úµã
+            // çˆ¶èŠ‚ç‚¹æ˜¯ç¥–çˆ¶ç»“ç‚¹çš„å·¦å­èŠ‚ç‚¹
             if (cur == grandParent->Left)
             {
-                // ¸¸½ÚµãÃ»ÓĞĞÖµÜ½Úµã»òÕßĞÖµÜ½ÚµãÊÇºÚÉ«
+                // çˆ¶èŠ‚ç‚¹æ²¡æœ‰å…„å¼ŸèŠ‚ç‚¹æˆ–è€…å…„å¼ŸèŠ‚ç‚¹æ˜¯é»‘è‰²
                 if (grandParent->Right == nullptr || grandParent->Right->Color == black)
                 {
                     insertKey(cur, newNode);
@@ -106,8 +106,8 @@ public:
                         rightRotate(grandParent);
                     }
                 }
-                // ÊåÊå½ÚµãÑÕÉ«ÊÇºìÉ«
-                // ÈÃ¸¸½ÚµãºÍÊåÊå½ÚµãÑÕÉ«±äÎªºÚÉ«£¬×æ¸¸½ÚµãÑÕÉ«±äÎªºìÉ«
+                // å”å”èŠ‚ç‚¹é¢œè‰²æ˜¯çº¢è‰²
+                // è®©çˆ¶èŠ‚ç‚¹å’Œå”å”èŠ‚ç‚¹é¢œè‰²å˜ä¸ºé»‘è‰²ï¼Œç¥–çˆ¶èŠ‚ç‚¹é¢œè‰²å˜ä¸ºçº¢è‰²
                 else if (grandParent->Right->Color == red)
                 {
                     insertKey(cur, newNode);
@@ -136,8 +136,8 @@ public:
                         leftRotate(grandParent);
                     }
                 }
-                // ÊåÊå½ÚµãÑÕÉ«ÊÇºìÉ«
-                // ÈÃ¸¸½ÚµãºÍÊåÊå½ÚµãÑÕÉ«±äÎªºÚÉ«£¬×æ¸¸½ÚµãÑÕÉ«±äÎªºìÉ«
+                // å”å”èŠ‚ç‚¹é¢œè‰²æ˜¯çº¢è‰²
+                // è®©çˆ¶èŠ‚ç‚¹å’Œå”å”èŠ‚ç‚¹é¢œè‰²å˜ä¸ºé»‘è‰²ï¼Œç¥–çˆ¶èŠ‚ç‚¹é¢œè‰²å˜ä¸ºçº¢è‰²
                 else if (grandParent->Left->Color == red)
                 {
                     insertKey(cur, newNode);
@@ -158,18 +158,18 @@ public:
         auto ret = find(key);
         if (ret.second == -1)
         {
-            cout << "Êı¾İ²»´æÔÚ" << endl;
+            cout << "æ•°æ®ä¸å­˜åœ¨" << endl;
             return false;
         }
 
-        // ÒªÉ¾³ıµÄ½Úµã
+        // è¦åˆ é™¤çš„èŠ‚ç‚¹
         Node *delNode = ret.first;
         ret.first = nullptr;
         Node *par = delNode->Parent;
-        // ÒªÉ¾³ıµÄ½ÚµãÊÇÒ¶×Ó½Úµã
+        // è¦åˆ é™¤çš„èŠ‚ç‚¹æ˜¯å¶å­èŠ‚ç‚¹
         if (delNode->Left == nullptr && delNode->Right == nullptr)
         {
-            // ÒªÉ¾³ıµÄÒ¶×Ó½ÚµãÊÇºìÉ«£¬Ö±½ÓÉ¾³ı
+            // è¦åˆ é™¤çš„å¶å­èŠ‚ç‚¹æ˜¯çº¢è‰²ï¼Œç›´æ¥åˆ é™¤
             if (delNode->Color == red)
             {
                 if (delNode == par->Left)
@@ -187,14 +187,14 @@ public:
                     return true;
                 }
             }
-            // ÒªÉ¾³ı½ÚµãDÎªºÚÉ«
+            // è¦åˆ é™¤èŠ‚ç‚¹Dä¸ºé»‘è‰²
             else
             {
-                // ÒªÉ¾³ıµÄ½ÚµãÊÇÆä¸¸½ÚµãµÄ×ó×Ó½Úµã
+                // è¦åˆ é™¤çš„èŠ‚ç‚¹æ˜¯å…¶çˆ¶èŠ‚ç‚¹çš„å·¦å­èŠ‚ç‚¹
                 if (delNode == par->Left)
                 {
                     Node *brother = par->Right;
-                    // ĞÖµÜ½ÚµãÃ»ÓĞ×óÓÒº¢×Ó
+                    // å…„å¼ŸèŠ‚ç‚¹æ²¡æœ‰å·¦å³å­©å­
                     if (brother->Left == nullptr && brother->Right == nullptr)
                     {
                         par->Left = nullptr;
@@ -203,7 +203,7 @@ public:
                         par->Color = black;
                         brother->Color = red;
                     }
-                    // ĞÖµÜ½ÚµãÓĞ×óº¢×Ó£¬ÓÒº¢×ÓÎª¿Õ
+                    // å…„å¼ŸèŠ‚ç‚¹æœ‰å·¦å­©å­ï¼Œå³å­©å­ä¸ºç©º
                     else if (brother->Left != nullptr && brother->Right == nullptr)
                     {
                         par->Left = nullptr;
@@ -214,7 +214,7 @@ public:
                         par->Color = black;
                         leftRotate(par);
                     }
-                    // ĞÖµÜ½ÚµãÓĞÓÒº¢×Ó£¬×óº¢×ÓÎª¿Õ
+                    // å…„å¼ŸèŠ‚ç‚¹æœ‰å³å­©å­ï¼Œå·¦å­©å­ä¸ºç©º
                     else if (brother->Left == nullptr && brother->Right != nullptr)
                     {
                         par->Left = nullptr;
@@ -225,7 +225,7 @@ public:
                         brother->Right->Color = black;
                         leftRotate(par);
                     }
-                    // ĞÖµÜ½Úµã×óÓÒº¢×Ó¶¼´æÔÚ£¬ÇÒÎªºìÉ«
+                    // å…„å¼ŸèŠ‚ç‚¹å·¦å³å­©å­éƒ½å­˜åœ¨ï¼Œä¸”ä¸ºçº¢è‰²
                     else if (brother->Left != nullptr && brother->Right != nullptr)
                     {
                         par->Left = nullptr;
@@ -236,7 +236,7 @@ public:
                         par->Color = black;
                         brother->Right->Color = black;
                     }
-                    // ĞÖµÜ½ÚµãÎªºìÉ«
+                    // å…„å¼ŸèŠ‚ç‚¹ä¸ºçº¢è‰²
                     else if (brother->Color == red)
                     {
                         par->Left = nullptr;
@@ -247,11 +247,11 @@ public:
                         par->Right->Color = red;
                     }
                 }
-                // ÒªÉ¾³ıµÄ½ÚµãÊÇÆä¸¸½ÚµãµÄÓÒ×Ó½Úµã
+                // è¦åˆ é™¤çš„èŠ‚ç‚¹æ˜¯å…¶çˆ¶èŠ‚ç‚¹çš„å³å­èŠ‚ç‚¹
                 else
                 {
                     Node *brother = par->Left;
-                    // ĞÖµÜ½ÚµãÃ»ÓĞ×óÓÒº¢×Ó
+                    // å…„å¼ŸèŠ‚ç‚¹æ²¡æœ‰å·¦å³å­©å­
                     if (brother->Left == nullptr && brother->Right == nullptr)
                     {
                         par->Right = nullptr;
@@ -260,7 +260,7 @@ public:
                         par->Color = black;
                         brother->Color = red;
                     }
-                    // ĞÖµÜ½ÚµãÓĞ×óº¢×Ó£¬ÓÒº¢×ÓÎª¿Õ
+                    // å…„å¼ŸèŠ‚ç‚¹æœ‰å·¦å­©å­ï¼Œå³å­©å­ä¸ºç©º
                     else if (brother->Left != nullptr && brother->Right == nullptr)
                     {
                         par->Right = nullptr;
@@ -271,7 +271,7 @@ public:
                         brother->Left->Color = black;
                         rightRotate(par);
                     }
-                    // ĞÖµÜ½ÚµãÓĞÓÒº¢×Ó£¬×óº¢×ÓÎª¿Õ
+                    // å…„å¼ŸèŠ‚ç‚¹æœ‰å³å­©å­ï¼Œå·¦å­©å­ä¸ºç©º
                     else if (brother->Left == nullptr && brother->Right != nullptr)
                     {
                         par->Right = nullptr;
@@ -282,7 +282,7 @@ public:
                         par->Color = black;
                         rightRotate(par);
                     }
-                    // ĞÖµÜ½Úµã×óÓÒº¢×Ó¶¼´æÔÚ£¬ÇÒÎªºìÉ«
+                    // å…„å¼ŸèŠ‚ç‚¹å·¦å³å­©å­éƒ½å­˜åœ¨ï¼Œä¸”ä¸ºçº¢è‰²
                     else if (brother->Left != nullptr && brother->Right != nullptr)
                     {
                         par->Right = nullptr;
@@ -293,7 +293,7 @@ public:
                         par->Color = black;
                         brother->Left->Color = black;
                     }
-                    // ĞÖµÜ½ÚµãÎªºìÉ«
+                    // å…„å¼ŸèŠ‚ç‚¹ä¸ºçº¢è‰²
                     else if (brother->Color == red)
                     {
                         par->Right = nullptr;
@@ -306,7 +306,7 @@ public:
                 }
             }
         }
-        // É¾³ı½ÚµãÖ»ÓĞ×óº¢×Ó£¬Ã»ÓĞÓÒº¢×Ó
+        // åˆ é™¤èŠ‚ç‚¹åªæœ‰å·¦å­©å­ï¼Œæ²¡æœ‰å³å­©å­
         else if (delNode->Left != nullptr && delNode->Right == nullptr)
         {
             Node *child = delNode->Left;
@@ -316,7 +316,7 @@ public:
             delete child;
             child = nullptr;
         }
-        // É¾³ı½ÚµãÖ»ÓĞÓÒº¢×Ó£¬Ã»ÓĞ×óº¢×Ó
+        // åˆ é™¤èŠ‚ç‚¹åªæœ‰å³å­©å­ï¼Œæ²¡æœ‰å·¦å­©å­
         else if (delNode->Left == nullptr && delNode->Right != nullptr)
         {
             Node *child = delNode->Right;
@@ -326,7 +326,7 @@ public:
             delete child;
             child = nullptr;
         }
-        // É¾³ı½ÚµãÓĞ×óÓÒ×Ó½Úµã£¬ÇÒ¶¼ÎªºìÉ«
+        // åˆ é™¤èŠ‚ç‚¹æœ‰å·¦å³å­èŠ‚ç‚¹ï¼Œä¸”éƒ½ä¸ºçº¢è‰²
         else if (delNode->Left != nullptr && delNode->Right != nullptr)
         {
             Node *sub = delNode->Right;
@@ -345,7 +345,7 @@ public:
         return true;
     }
 
-    // ÕÒµ½·µ»Ø½ÚµãÓë1£¬¿Õ·µ»ØnullptrÓë0£¬Ã»ÕÒµ½·µ»ØÒª²åÈëÎ»ÖÃÓë-1
+    // æ‰¾åˆ°è¿”å›èŠ‚ç‚¹ä¸1ï¼Œç©ºè¿”å›nullpträ¸0ï¼Œæ²¡æ‰¾åˆ°è¿”å›è¦æ’å…¥ä½ç½®ä¸-1
     pair<Node *, int> find(const int &key)
     {
         if (root == nullptr)
@@ -386,7 +386,7 @@ public:
     }
 
 private:
-    // Î§ÈÆ½Úµãx×óĞı
+    // å›´ç»•èŠ‚ç‚¹xå·¦æ—‹
     void leftRotate(Node *x)
     {
         Node *y = x->Right;
@@ -407,7 +407,7 @@ private:
         x->Parent = y;
     }
 
-    // Î§ÈÆ½ÚµãxÓÒĞı
+    // å›´ç»•èŠ‚ç‚¹xå³æ—‹
     void rightRotate(Node *x)
     {
         Node *y = x->Left;
@@ -429,8 +429,8 @@ private:
     }
 
 private:
-    Node *root; // ¸ù½Úµã
-    Node *nil;  // Ò¶×Ó½Úµã
+    Node *root; // æ ¹èŠ‚ç‚¹
+    Node *nil;  // å¶å­èŠ‚ç‚¹
 };
 
 int main()

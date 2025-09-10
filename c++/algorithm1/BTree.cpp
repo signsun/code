@@ -9,12 +9,12 @@ struct BTreeNode
     // K _keys[M - 1];
     // BTreeNode<K, M>* _subs[M];
 
-    // M²æÊ÷£º¼´Ò»¸ö½Úµã×î¶àÓĞM-1¸ö¹Ø¼ü×Ö,M¸öº¢×Ó
-    // ÎªÁË·½±ã²åÈëÒÔºóÔÙ·ÖÁÑ£¬¶à¸øÒ»¸ö¿Õ¼ä
-    K _keys[M];                    // ´æ´¢¹Ø¼ü×ÖµÄÊı×é
-    BTreeNode<K, M> *_subs[M + 1]; // ´æ´¢º¢×ÓÖ¸ÕëµÄÊı×é
-    size_t _n;                     // ¼ÇÂ¼Êµ¼Ê´æ´¢µÄ¹Ø¼ü×ÖµÄ¸öÊı
-    BTreeNode<K, M> *_parent;      // ¸¸Ö¸Õë
+    // Må‰æ ‘ï¼šå³ä¸€ä¸ªèŠ‚ç‚¹æœ€å¤šæœ‰M-1ä¸ªå…³é”®å­—,Mä¸ªå­©å­
+    // ä¸ºäº†æ–¹ä¾¿æ’å…¥ä»¥åå†åˆ†è£‚ï¼Œå¤šç»™ä¸€ä¸ªç©ºé—´
+    K _keys[M];                    // å­˜å‚¨å…³é”®å­—çš„æ•°ç»„
+    BTreeNode<K, M> *_subs[M + 1]; // å­˜å‚¨å­©å­æŒ‡é’ˆçš„æ•°ç»„
+    size_t _n;                     // è®°å½•å®é™…å­˜å‚¨çš„å…³é”®å­—çš„ä¸ªæ•°
+    BTreeNode<K, M> *_parent;      // çˆ¶æŒ‡é’ˆ
 
     BTreeNode()
     {
@@ -29,44 +29,44 @@ struct BTreeNode
     }
 };
 
-// Êı¾İÊÇ´æÔÚ´ÅÅÌ£¬KÊÇ´ÅÅÌµØÖ·
+// æ•°æ®æ˜¯å­˜åœ¨ç£ç›˜ï¼ŒKæ˜¯ç£ç›˜åœ°å€
 template <class K, size_t M>
 class myBtree
 {
     typedef BTreeNode<K, M> Node;
 
 public:
-    // ·µ»ØÖµ: Node´ú±íÕÒµ½µÄ½Úµã,intÎª¸ÃÔªËØÔÚ¸Ã½ÚµãÖĞµÄÎ»ÖÃ
+    // è¿”å›å€¼: Nodeä»£è¡¨æ‰¾åˆ°çš„èŠ‚ç‚¹,intä¸ºè¯¥å…ƒç´ åœ¨è¯¥èŠ‚ç‚¹ä¸­çš„ä½ç½®
     pair<Node *, int> Find(const K &key)
     {
-        // ´Ó¸ù½Úµã¿ªÊ¼ÕÒ
+        // ä»æ ¹èŠ‚ç‚¹å¼€å§‹æ‰¾
         Node *cur = _root;
         Node *parent = nullptr;
 
-        while (cur) // ½Úµã´æÔÚ
+        while (cur) // èŠ‚ç‚¹å­˜åœ¨
         {
-            // ÔÚÒ»¸ö½Úµã²éÕÒ
+            // åœ¨ä¸€ä¸ªèŠ‚ç‚¹æŸ¥æ‰¾
             size_t i = 0;
             while (i < cur->_n)
             {
-                if (key < cur->_keys[i]) // ¿ÉÄÜÔÚ×ó×ÓÊ÷
+                if (key < cur->_keys[i]) // å¯èƒ½åœ¨å·¦å­æ ‘
                 {
                     break;
                 }
-                else if (key > cur->_keys[i]) // ÏòÓÒÑ°ÕÒ
+                else if (key > cur->_keys[i]) // å‘å³å¯»æ‰¾
                 {
                     ++i;
                 }
-                else // ÕÒµ½·µ»Ø
+                else // æ‰¾åˆ°è¿”å›
                 {
                     return make_pair(cur, i);
                 }
             }
-            // ÔÚ×ÓÊ÷ÖĞ²éÕÒ
+            // åœ¨å­æ ‘ä¸­æŸ¥æ‰¾
             parent = cur;
             cur = cur->_subs[i];
         }
-        // Ã»ÕÒµ½£¬°ÑÒ¶×Ó½Úµã·µ»ØÈ¥
+        // æ²¡æ‰¾åˆ°ï¼ŒæŠŠå¶å­èŠ‚ç‚¹è¿”å›å»
         return make_pair(parent, -1);
     }
 
@@ -77,7 +77,7 @@ public:
         {
             if (key < node->_keys[end])
             {
-                // ²åÈë Å²¶¯keyºÍËüµÄÓÒº¢×Ó
+                // æ’å…¥ æŒªåŠ¨keyå’Œå®ƒçš„å³å­©å­
                 node->_keys[end + 1] = node->_keys[end];
                 node->_subs[end + 2] = node->_subs[end + 1];
                 --end;
@@ -98,7 +98,7 @@ public:
 
     bool Insert(const K &key)
     {
-        // Èç¹ûÊ÷Îª¿Õ£¬Ö±½Ó²åÈë
+        // å¦‚æœæ ‘ä¸ºç©ºï¼Œç›´æ¥æ’å…¥
         if (_root == nullptr)
         {
             _root = new Node;
@@ -108,24 +108,24 @@ public:
             return true;
         }
 
-        // ÕÒ²åÈëÎ»ÖÃ£¬Èç¹ûkeyÒÑ¾­´æÔÚ£¬Ôò²»²åÈë
+        // æ‰¾æ’å…¥ä½ç½®ï¼Œå¦‚æœkeyå·²ç»å­˜åœ¨ï¼Œåˆ™ä¸æ’å…¥
         auto ret = Find(key);
         if (ret.second >= 0)
         {
             return false;
         }
 
-        // Èç¹ûÃ»ÓĞÕÒµ½£¬FindË³±ã´ø»ØÁËÒª²åÈëµÄÄÇ¸öÒ¶×Ó½Úµã
+        // å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼ŒFindé¡ºä¾¿å¸¦å›äº†è¦æ’å…¥çš„é‚£ä¸ªå¶å­èŠ‚ç‚¹
 
-        // Ñ­»·Ã¿´ÎÍùcur²åÈë newkeyºÍchild
+        // å¾ªç¯æ¯æ¬¡å¾€curæ’å…¥ newkeyå’Œchild
         Node *cur = ret.first;
         Node *child = nullptr;
         K newkey = key;
         while (1)
         {
             InsertKey(cur, newkey, child);
-            // ÂúÁË¾ÍÒª·ÖÁÑ
-            // Ã»ÓĞÂú£¬²åÈë¾Í½áÊø
+            // æ»¡äº†å°±è¦åˆ†è£‚
+            // æ²¡æœ‰æ»¡ï¼Œæ’å…¥å°±ç»“æŸ
             if (cur->_n < M)
             {
                 num++;
@@ -134,43 +134,43 @@ public:
             else
             {
                 size_t mid = M / 2;
-                // ÉêÇëĞÖµÜ½Úµã,·ÖÁÑÒ»°ë¸øĞÖµÜ [mid + 1, M - 1]
+                // ç”³è¯·å…„å¼ŸèŠ‚ç‚¹,åˆ†è£‚ä¸€åŠç»™å…„å¼Ÿ [mid + 1, M - 1]
                 Node *brother = new Node;
                 size_t j = 0;
                 size_t i = mid + 1;
                 for (; i < M; i++)
                 {
-                    // ·ÖÁÑ¿½±´keyºÍkeyµÄÓÒº¢×Ó¸øĞÖµÜ (·ÖÁÑµÄÊÇÒ¶×Ó½ÚµãÃ»ÓĞº¢×Ó,·ÖÖ§½ÚµãºÍ¸ù½Úµã¶¼ÓĞº¢×Ó)
+                    // åˆ†è£‚æ‹·è´keyå’Œkeyçš„å³å­©å­ç»™å…„å¼Ÿ (åˆ†è£‚çš„æ˜¯å¶å­èŠ‚ç‚¹æ²¡æœ‰å­©å­,åˆ†æ”¯èŠ‚ç‚¹å’Œæ ¹èŠ‚ç‚¹éƒ½æœ‰å­©å­)
                     brother->_keys[j] = cur->_keys[i];
                     brother->_subs[j] = cur->_subs[i];
-                    // Èç¹ûº¢×Ó´æÔÚ,·ÖÁÑº¢×Ó¸øĞÖµÜÖ®ºó,º¢×ÓµÄ¸¸Ö¸ÕëÖ¸ÏòĞÖµÜ
+                    // å¦‚æœå­©å­å­˜åœ¨,åˆ†è£‚å­©å­ç»™å…„å¼Ÿä¹‹å,å­©å­çš„çˆ¶æŒ‡é’ˆæŒ‡å‘å…„å¼Ÿ
                     if (cur->_subs[i])
                     {
                         cur->_subs[i]->_parent = brother;
                     }
                     ++j;
 
-                    // ¿½×ßÖØÖÃÒ»ÏÂ·½±ã¹Û²ì
+                    // æ‹·èµ°é‡ç½®ä¸€ä¸‹æ–¹ä¾¿è§‚å¯Ÿ
                     cur->_keys[i] = K();
                     cur->_subs[i] = nullptr;
                 }
 
-                // ×îºóÒ»¸öÓÒº¢×ÓÒ²Òª¿½±´¸øĞÖµÜ
+                // æœ€åä¸€ä¸ªå³å­©å­ä¹Ÿè¦æ‹·è´ç»™å…„å¼Ÿ
                 brother->_subs[j] = cur->_subs[i];
-                // º¢×ÓµÄ¸¸Ö¸ÕëÖ¸ÏòĞÖµÜ
+                // å­©å­çš„çˆ¶æŒ‡é’ˆæŒ‡å‘å…„å¼Ÿ
                 if (cur->_subs[i])
                     cur->_subs[i]->_parent = brother;
                 cur->_subs[i] = nullptr;
 
-                // ¸üĞÂ½Úµã¹Ø¼ü×Ö¸öÊı
+                // æ›´æ–°èŠ‚ç‚¹å…³é”®å­—ä¸ªæ•°
                 brother->_n = j;
-                cur->_n -= (brother->_n + 1); // 1±íÊ¾ÖĞÎ»ÊıÒªÌáÈ¡¸ø¸¸Ç×
+                cur->_n -= (brother->_n + 1); // 1è¡¨ç¤ºä¸­ä½æ•°è¦æå–ç»™çˆ¶äº²
 
-                // ÌáÈ¡ÖĞÎ»Êı¸ø¸¸Ç×
+                // æå–ä¸­ä½æ•°ç»™çˆ¶äº²
                 K newmid = cur->_keys[mid];
                 cur->_keys[mid] = K();
 
-                // ·ÖÁÑµÄÊÇ¸ù½Úµã
+                // åˆ†è£‚çš„æ˜¯æ ¹èŠ‚ç‚¹
                 if (cur->_parent == nullptr)
                 {
                     _root = new Node;
@@ -183,9 +183,9 @@ public:
                     num++;
                     return true;
                 }
-                else // ·ÖÁÑµÄÊÇÒ¶×Ó½Úµã»òÕß·ÖÖ§½Úµã
+                else // åˆ†è£‚çš„æ˜¯å¶å­èŠ‚ç‚¹æˆ–è€…åˆ†æ”¯èŠ‚ç‚¹
                 {
-                    // ×ª»»³ÉÍùcur->parent È¥²åÈëcur->[mid] ºÍ brother
+                    // è½¬æ¢æˆå¾€cur->parent å»æ’å…¥cur->[mid] å’Œ brother
                     cur = cur->_parent;
                     newkey = newmid;
                     child = brother;
@@ -199,31 +199,31 @@ public:
         if (root == nullptr)
             return;
 
-        // ×ó ¸ù ×ó ¸ù ... ÓÒ
+        // å·¦ æ ¹ å·¦ æ ¹ ... å³
         size_t i = 0;
         for (; i < root->_n; ++i)
         {
-            InOrder(root->_subs[i]);       // ×ó×ÓÊ÷
-            cout << root->_keys[i] << " "; // ¸ù
+            InOrder(root->_subs[i]);       // å·¦å­æ ‘
+            cout << root->_keys[i] << " "; // æ ¹
         }
-        InOrder(root->_subs[i]); // ×îºóµÄÄÇ¸öÓÒ×ÓÊ÷
+        InOrder(root->_subs[i]); // æœ€åçš„é‚£ä¸ªå³å­æ ‘
     }
 
     bool Remove(const K &key)
     {
         auto ret = Find(key);
-        // Ã»ÕÒµ½
+        // æ²¡æ‰¾åˆ°
         if (ret.second == -1)
             return false;
 
-        // ÕÒµ½É¾³ı½áµãÒÔ¼°É¾³ı¹Ø¼ü×Ö¶ÔÓ¦µÄÏÂ±ê
+        // æ‰¾åˆ°åˆ é™¤ç»“ç‚¹ä»¥åŠåˆ é™¤å…³é”®å­—å¯¹åº”çš„ä¸‹æ ‡
         Node *del = ret.first;
         size_t deli = ret.second;
 
-        // 1.·ÇÒ¶×Ó½áµã ----> ÕÒ×ó×ÓÊ÷×îÓÒ¹Ø¼ü×Ö»òÕßÓÒ×ÓÊ÷×î×ó¹Ø¼ü×Ö,(Ò¶×Ó½ÚµãµÄ¹Ø¼ü×Ö)Ìæ»»É¾³ı
+        // 1.éå¶å­ç»“ç‚¹ ----> æ‰¾å·¦å­æ ‘æœ€å³å…³é”®å­—æˆ–è€…å³å­æ ‘æœ€å·¦å…³é”®å­—,(å¶å­èŠ‚ç‚¹çš„å…³é”®å­—)æ›¿æ¢åˆ é™¤
         if (del->_subs[deli])
         {
-            // ÕÒÓÒ×ÓÊ÷×î×ó¹Ø¼ü×Ö
+            // æ‰¾å³å­æ ‘æœ€å·¦å…³é”®å­—
             Node *cur = del->_subs[deli + 1];
             while (cur->_subs[0])
             {
@@ -231,35 +231,35 @@ public:
             }
             del->_keys[deli] = cur->_keys[0];
             del = cur;
-            compress(del, 1); // ÓÃºóÃæ¹Ø¼ü×ÖºÍº¢×Ó½«Ç°Ãæ¸²¸Ç
+            compress(del, 1); // ç”¨åé¢å…³é”®å­—å’Œå­©å­å°†å‰é¢è¦†ç›–
         }
-        else // Ò¶×Ó½Úµã
+        else // å¶å­èŠ‚ç‚¹
         {
             compress(del, deli + 1);
         }
 
-        // É¾³ı¹Ø¼ü×ÖÖ®ºó,¿´ÊÇ·ñ·ûºÏ¹Ø¼ü×Ö¸öÊı×îÉÙÊÇcile[M/2] - 1,Èç¹û²»Âú×ã¾ÍÈ¥µ÷Õû»òÕßºÏ²¢.
+        // åˆ é™¤å…³é”®å­—ä¹‹å,çœ‹æ˜¯å¦ç¬¦åˆå…³é”®å­—ä¸ªæ•°æœ€å°‘æ˜¯cile[M/2] - 1,å¦‚æœä¸æ»¡è¶³å°±å»è°ƒæ•´æˆ–è€…åˆå¹¶.
         int minkeycnt = ceil(M / 2.0) - 1;
         while (1)
         {
-            if (del->_n < minkeycnt) // ¹Ø¼ü×Ö±È×îÉÙ»¹ÉÙ,µ÷Õû»òÕßºÏ²¢
+            if (del->_n < minkeycnt) // å…³é”®å­—æ¯”æœ€å°‘è¿˜å°‘,è°ƒæ•´æˆ–è€…åˆå¹¶
             {
-                // ²»¹Üµ÷Õû»¹ÊÇºÏ²¢¶¼ºÍ¸¸½Úµã¶ÔÓ¦¹Ø¼ü×ÖÓĞ¹Ø,ÏÈÕÒ¸¸Ç×¶ÔÓ¦¹Ø¼ü×ÖÏÂ±ê
+                // ä¸ç®¡è°ƒæ•´è¿˜æ˜¯åˆå¹¶éƒ½å’Œçˆ¶èŠ‚ç‚¹å¯¹åº”å…³é”®å­—æœ‰å…³,å…ˆæ‰¾çˆ¶äº²å¯¹åº”å…³é”®å­—ä¸‹æ ‡
                 size_t j = 0;
                 Node *parent = del->_parent;
                 while (parent->_subs[j] != del)
                     j++;
-                // Èç¹ûdelÓĞÓÒĞÖµÜ ×óµ÷Õû»òÕß×óºÏ²¢
+                // å¦‚æœdelæœ‰å³å…„å¼Ÿ å·¦è°ƒæ•´æˆ–è€…å·¦åˆå¹¶
                 if (j < parent->_n)
                 {
                     LeftAdjust(parent, del, minkeycnt, j);
                 }
-                else // delÊÇ¸¸Ç×ÆäËûº¢×Ó,¶¼¿ÉÒÔ½øĞĞ ÓÒµ÷Õû»òÕßÓÒºÏ²¢
+                else // delæ˜¯çˆ¶äº²å…¶ä»–å­©å­,éƒ½å¯ä»¥è¿›è¡Œ å³è°ƒæ•´æˆ–è€…å³åˆå¹¶
                 {
                     RightAdjust(parent, del, minkeycnt, j);
                 }
-                del = parent;    // ¼ÌĞøÏòÉÏµ÷Õû
-                if (del = _root) // µ÷Õûµ½¸ù½áÊø
+                del = parent;    // ç»§ç»­å‘ä¸Šè°ƒæ•´
+                if (del = _root) // è°ƒæ•´åˆ°æ ¹ç»“æŸ
                     break;
             }
             else
@@ -269,8 +269,8 @@ public:
         }
         if (_root->_n == 0)
         {
-            _root = _root->_subs[0]; // ºÏ²¢µÄÊÇĞÂ¸ù
-            delete del;              // É¾Ô­±¾µÄ¸ù
+            _root = _root->_subs[0]; // åˆå¹¶çš„æ˜¯æ–°æ ¹
+            delete del;              // åˆ åŸæœ¬çš„æ ¹
             _root->_parent = nullptr;
         }
         num--;
@@ -280,27 +280,27 @@ public:
     void LeftAdjust(Node *parent, Node *del, size_t minkeycnt, size_t j)
     {
         Node *Rbrother = parent->_subs[j + 1];
-        if (Rbrother->_n > minkeycnt) // µ÷Õû
+        if (Rbrother->_n > minkeycnt) // è°ƒæ•´
         {
-            del->_keys[del->_n] = parent->_keys[j];       // ¸¸½Úµã¶ÔÓ¦¹Ø¼ü×ÖÏÂÒÆ
-            parent->_keys[j] = Rbrother->_keys[0];        // ÓÒĞÖµÜ×îĞ¡¹Ø¼ü×ÖÉÏÒÆ¸¸½Úµã
-            del->_subs[del->_n + 1] = Rbrother->_subs[0]; // ÓÒĞÖµÜ×î×óÖ¸Õë×óÒÆ
-            if (Rbrother->_subs[0])                       // ĞŞ¸ÄÓÒĞÖµÜ×î×óº¢×ÓµÄ¸¸Ö¸Õë
+            del->_keys[del->_n] = parent->_keys[j];       // çˆ¶èŠ‚ç‚¹å¯¹åº”å…³é”®å­—ä¸‹ç§»
+            parent->_keys[j] = Rbrother->_keys[0];        // å³å…„å¼Ÿæœ€å°å…³é”®å­—ä¸Šç§»çˆ¶èŠ‚ç‚¹
+            del->_subs[del->_n + 1] = Rbrother->_subs[0]; // å³å…„å¼Ÿæœ€å·¦æŒ‡é’ˆå·¦ç§»
+            if (Rbrother->_subs[0])                       // ä¿®æ”¹å³å…„å¼Ÿæœ€å·¦å­©å­çš„çˆ¶æŒ‡é’ˆ
             {
                 Rbrother->_subs[0]->_parent = del;
             }
-            del->_n++;             // del¹Ø¼ü×Ö+1
-            compress(Rbrother, 1); // ÓÒĞÖµÜÖĞÊ£Óà¹Ø¼üĞÔºÍº¢×ÓÇ°ÒÆ
+            del->_n++;             // delå…³é”®å­—+1
+            compress(Rbrother, 1); // å³å…„å¼Ÿä¸­å‰©ä½™å…³é”®æ€§å’Œå­©å­å‰ç§»
             // size_t i = 1;
-            // for(; i < Rbrother->_n; ++i)//ÓÒĞÖµÜÖĞÊ£Óà¹Ø¼üĞÔºÍº¢×ÓÇ°ÒÆ
+            // for(; i < Rbrother->_n; ++i)//å³å…„å¼Ÿä¸­å‰©ä½™å…³é”®æ€§å’Œå­©å­å‰ç§»
             // {
             //     Rbrother->_key[i - 1] = Rbrother->_key[i];
             //     Rbrother->_sub[i - 1] = Rbrother->_sub[i];
             // }
-            // Rbrother->_sub[i - 1] = Rbrother->_sub[i];//×îºóÒ»¸öº¢×Ó
-            // Rbrother->_n--;//ÓÒĞÖµÜ¹Ø¼ü×Ö¸öÊı¼õÒ»
+            // Rbrother->_sub[i - 1] = Rbrother->_sub[i];//æœ€åä¸€ä¸ªå­©å­
+            // Rbrother->_n--;//å³å…„å¼Ÿå…³é”®å­—ä¸ªæ•°å‡ä¸€
         }
-        else // ºÏ²¢
+        else // åˆå¹¶
         {
             merge(parent, del, Rbrother, j);
         }
@@ -309,32 +309,32 @@ public:
     void RightAdjust(Node *parent, Node *del, size_t minkeycnt, size_t j)
     {
         Node *Lbrother = parent->_subs[j - 1];
-        if (Lbrother->_n > minkeycnt) // µ÷Õû
+        if (Lbrother->_n > minkeycnt) // è°ƒæ•´
         {
-            // ½«É¾³ı½áµãµÄ¹Ø¼ü×ÖºÍº¢×ÓÍùºóÒÆÒ»Î»
+            // å°†åˆ é™¤ç»“ç‚¹çš„å…³é”®å­—å’Œå­©å­å¾€åç§»ä¸€ä½
             del->_subs[del->_n + 1] = del->_subs[del->_n];
             for (size_t i = del->_n - 1; i >= 0; --i)
             {
                 del->_keys[i + 1] = del->_keys[i];
                 del->_subs[i + 1] = del->_subs[i];
             }
-            // ¸¸Ç×½áµã¶ÔÓ¦¹Ø¼ü×ÖÏÂÒÆ
+            // çˆ¶äº²ç»“ç‚¹å¯¹åº”å…³é”®å­—ä¸‹ç§»
             del->_keys[0] = parent->_keys[j - 1];
-            // ×óĞÖµÜ×î´ó¹Ø¼ü×ÖÉÏÒÆ
+            // å·¦å…„å¼Ÿæœ€å¤§å…³é”®å­—ä¸Šç§»
             parent->_keys[j - 1] = Lbrother->_keys[Lbrother->_n - 1];
-            // ×óĞÖµÜ×îÓÒÖ¸ÕëÓÒÒÆ
+            // å·¦å…„å¼Ÿæœ€å³æŒ‡é’ˆå³ç§»
             del->_subs[0] = Lbrother->_subs[Lbrother->_n];
-            // ĞŞ¸Ä×óĞÖµÜ×îÓÒº¢×ÓµÄ¸¸Ö¸Õë
+            // ä¿®æ”¹å·¦å…„å¼Ÿæœ€å³å­©å­çš„çˆ¶æŒ‡é’ˆ
             if (Lbrother->_subs[Lbrother->_n])
             {
                 Lbrother->_subs[Lbrother->_n]->_parent = del;
             }
-            // ÎªÁË·½±ã¹Û²ì
+            // ä¸ºäº†æ–¹ä¾¿è§‚å¯Ÿ
             Lbrother->_keys[Lbrother->_n - 1] = K();
             Lbrother->_subs[Lbrother->_n] = nullptr;
-            // del¹Ø¼ü×Ö+1
+            // delå…³é”®å­—+1
             del->_n++;
-            // ×óĞÖµÜ¹Ø¼ü×Ö¼õÒ»¼´¿É,²»ÓÃÔÚÒÆ¶¯
+            // å·¦å…„å¼Ÿå…³é”®å­—å‡ä¸€å³å¯,ä¸ç”¨åœ¨ç§»åŠ¨
             Lbrother->_n--;
         }
         else
@@ -347,36 +347,36 @@ public:
     {
         if (brother == parent->_subs[j - 1])
         {
-            // ÓÒºÏ²¢,±£Áô×ó±ß½áµã,Òò´Ë½«delºÍ×óĞÖµÜÖ¸Õë½»»»Ò»ÏÂ,×ª»¯³É×óºÏ²¢
+            // å³åˆå¹¶,ä¿ç•™å·¦è¾¹ç»“ç‚¹,å› æ­¤å°†delå’Œå·¦å…„å¼ŸæŒ‡é’ˆäº¤æ¢ä¸€ä¸‹,è½¬åŒ–æˆå·¦åˆå¹¶
             swap(del, brother);
             j--;
         }
 
-        // ×óºÏ²¢,±£Áôdel½Úµã,É¾³ıĞÖµÜ½Úµã(±£Áô×ó±ß½áµã)
-        del->_keys[del->_n] = parent->_keys[j]; // ½«¸¸½Úµã¶ÔÓ¦¹Ø¼ü×ÖÏÂÒÆ
-        // del->_sub[del->_n + 1] = brother->_sub[0]; // ´ÓÓÒĞÖµÜ½Úµã×óÒÆµÚÒ»¸öÖ¸Õë
-        // for (size_t i = 0; i < brother->_n; ++i)   // ½«ÓÒĞÖµÜÊ£Óà¹Ø¼ü×ÖºÍÖ¸ÕëÇ°ÒÆ
+        // å·¦åˆå¹¶,ä¿ç•™delèŠ‚ç‚¹,åˆ é™¤å…„å¼ŸèŠ‚ç‚¹(ä¿ç•™å·¦è¾¹ç»“ç‚¹)
+        del->_keys[del->_n] = parent->_keys[j]; // å°†çˆ¶èŠ‚ç‚¹å¯¹åº”å…³é”®å­—ä¸‹ç§»
+        // del->_sub[del->_n + 1] = brother->_sub[0]; // ä»å³å…„å¼ŸèŠ‚ç‚¹å·¦ç§»ç¬¬ä¸€ä¸ªæŒ‡é’ˆ
+        // for (size_t i = 0; i < brother->_n; ++i)   // å°†å³å…„å¼Ÿå‰©ä½™å…³é”®å­—å’ŒæŒ‡é’ˆå‰ç§»
         // {
         //     del->_key[del->_n + i + 1] = brother->_key[i];
         //     del->_sub[del->_n + i + 2] = brother->_sub[i + 1];
         // }
-        // ½«ÓÒĞÖµÜ¹Ø¼ü×ÖºÍÖ¸ÕëÇ°ÒÆ
+        // å°†å³å…„å¼Ÿå…³é”®å­—å’ŒæŒ‡é’ˆå‰ç§»
         size_t i = 0;
         for (; i < brother->_n; ++i)
         {
             del->_keys[del->_n + i + 1] = brother->_keys[i];
             del->_subs[del->_n + i + 1] = brother->_subs[i];
-            // ±ğÍü¼ÇĞŞ¸Äº¢×Ó¸¸Ö¸ÕëµÄÖ¸Ïò
+            // åˆ«å¿˜è®°ä¿®æ”¹å­©å­çˆ¶æŒ‡é’ˆçš„æŒ‡å‘
             if (brother->_subs[i])
             {
                 brother->_subs[i]->_parent = del;
             }
         }
         del->_subs[del->_n + i + 1] = brother->_subs[i];
-        del->_n += brother->_n + 1;              // ¸üĞÂ±£´æ½ÚµãµÄ¹Ø¼ü×Ö¸öÊı
-        delete brother;                          // É¾³ıĞÖµÜ
-        parent->_keys[j] = parent->_keys[j + 1]; // ÏÈ½«¸¸½Úµã¶ÔÓ¦¹Ø¼ü×ÖºóÃæÒ»Î»¹Ø¼ü×ÖÇ°ÒÆ,·ñÔòcompree»á³ö´í
-        compress(parent, j + 2);                 // ½«¸¸½Úµã¶ÔÓ¦¹Ø¼ü×ÖºóÃæµÄ¹Ø¼ü×ÖºÍº¢×ÓÍùÇ°ÒÆ
+        del->_n += brother->_n + 1;              // æ›´æ–°ä¿å­˜èŠ‚ç‚¹çš„å…³é”®å­—ä¸ªæ•°
+        delete brother;                          // åˆ é™¤å…„å¼Ÿ
+        parent->_keys[j] = parent->_keys[j + 1]; // å…ˆå°†çˆ¶èŠ‚ç‚¹å¯¹åº”å…³é”®å­—åé¢ä¸€ä½å…³é”®å­—å‰ç§»,å¦åˆ™compreeä¼šå‡ºé”™
+        compress(parent, j + 2);                 // å°†çˆ¶èŠ‚ç‚¹å¯¹åº”å…³é”®å­—åé¢çš„å…³é”®å­—å’Œå­©å­å¾€å‰ç§»
     }
 
     void compress(Node *node, size_t pos)
@@ -387,8 +387,8 @@ public:
             node->_keys[i - 1] = node->_keys[i];
             node->_subs[i - 1] = node->_subs[i];
         }
-        node->_subs[i - 1] = node->_subs[i]; // ×îºóÒ»¸öº¢×Ó½Úµã
-        // ·½±ã¹Û²ì
+        node->_subs[i - 1] = node->_subs[i]; // æœ€åä¸€ä¸ªå­©å­èŠ‚ç‚¹
+        // æ–¹ä¾¿è§‚å¯Ÿ
         node->_keys[node->_n - 1] = K();
         node->_subs[node->_n] = nullptr;
 

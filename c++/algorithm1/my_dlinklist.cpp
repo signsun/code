@@ -6,7 +6,7 @@ template <typename T>
 class myDLinkList
 {
 private:
-    // ĞéÄâÍ·Î²½Úµã
+    // è™šæ‹Ÿå¤´å°¾èŠ‚ç‚¹
     struct Node
     {
         T val;
@@ -19,7 +19,7 @@ private:
             this->prev = nullptr;
         }
     };
-    // ÕÒµ½¶ÔÓ¦½Úµã
+    // æ‰¾åˆ°å¯¹åº”èŠ‚ç‚¹
     Node *findNode(int index)
     {
         Node *temp = head;
@@ -53,7 +53,7 @@ public:
         delete head;
         delete tail;
     }
-    // Î²Ôö
+    // å°¾å¢
     void addLast(T value)
     {
         Node *x = new Node(value);
@@ -104,7 +104,7 @@ public:
         size++;
     }
 
-    // Î²É¾
+    // å°¾åˆ 
     void removeLast()
     {
         Node *old = tail->prev;
@@ -119,7 +119,7 @@ public:
         size--;
     }
 
-    // Í·É¾
+    // å¤´åˆ 
     void removeHead()
     {
         Node *old = head->next;
@@ -134,7 +134,7 @@ public:
         size--;
     }
 
-    // É¾³ı
+    // åˆ é™¤
     T remove(int index)
     {
         Node *qtemp = findNode(index);
@@ -152,21 +152,21 @@ public:
         return qtemp->val;
     }
 
-    // ¸Ä
+    // æ”¹
     void modify(int index, T value)
     {
         Node *p = findNode(index);
         p->val = value;
     }
 
-    // ²éÕÒ
+    // æŸ¥æ‰¾
     T myfind(int index)
     {
         Node *p = findNode(index);
         return p->val;
     }
 
-    // »ñÈ¡Á´±í´óĞ¡
+    // è·å–é“¾è¡¨å¤§å°
     int getSize()
     {
         return size;
