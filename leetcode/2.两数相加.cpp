@@ -4,6 +4,15 @@
  * [2] 两数相加
  */
 
+#include <vector>
+#include <list>
+#include <string>
+#include <algorithm>
+#include <unordered_map>
+#include <map>
+
+using namespace std;
+
 // @lc code=start
 /**
  * Definition for singly-linked list.
@@ -15,11 +24,20 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution
+{
 public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+    {
     }
 };
 // @lc code=end
-
